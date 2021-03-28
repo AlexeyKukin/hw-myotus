@@ -7,7 +7,7 @@ import (
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -79,4 +79,31 @@ func TestTop10(t *testing.T) {
 			require.Equal(t, expected, Top10(text))
 		}
 	})
+}
+
+// Custom simple tests task with asterisk.
+func TestTop10Custom(t *testing.T) {
+	if taskWithAsteriskIsCompleted {
+		tests := []struct {
+			input    string
+			expected []string
+		}{
+			{input: `однослово`, expected: []string{`однослово`}},
+			{input: `автобус \t якорь`, expected: []string{`\t`, `автобус`, `якорь`}},
+			{input: `автобус \n ящик`, expected: []string{`\n`, `автобус`, `ящик`}},
+			{input: "автобус \t яблоко", expected: []string{`автобус`, `яблоко`}},
+			{input: "автобус \n ягода", expected: []string{`автобус`, `ягода`}},
+			{input: `a`, expected: []string{`a`}},
+			{input: `автобус * яхта`, expected: []string{`*`, `автобус`, `яхта`}},
+			{input: `автобус \* ялик`, expected: []string{`\*`, `автобус`, `ялик`}},
+		}
+
+		for _, tc := range tests {
+			tc := tc
+			t.Run(tc.input, func(t *testing.T) {
+				result := Top10(tc.input)
+				require.Equal(t, tc.expected, result)
+			})
+		}
+	}
 }
