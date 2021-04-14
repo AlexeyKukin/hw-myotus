@@ -51,6 +51,50 @@ func TestCache(t *testing.T) {
 
 	t.Run("purge logic", func(t *testing.T) {
 		// Write me
+		c := NewCache(3)
+
+		wasInCache := c.Set("aaa", 100)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("bbb", 200)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("ccc", 300)
+		require.False(t, wasInCache)
+
+		wasInCache = c.Set("ddd", 400)
+		require.False(t, wasInCache)
+// Проверяем, должен быть исключен элемент "aaa"
+		val,isexist :=c.Get("aaa")
+		require.False(t, isexist)
+		require.Equal(t, nil, val)
+
+		val,isexist = c.Get("bbb")
+		require.True(t, isexist)
+		require.Equal(t, 200, val)
+
+		val,isexist = c.Get("ccc")
+		require.True(t, isexist)
+		require.Equal(t, 300, val)
+
+		val,isexist = c.Get("ddd")
+		require.True(t, isexist)
+		require.Equal(t, 400, val)
+
+	// Теперь вызовем элемент "bbb" и добавим еще один
+
+		val,isexist = c.Get("bbb")
+		require.True(t, isexist)
+		require.Equal(t, 200, val)
+
+		wasInCache = c.Set("xxx", 777)
+		require.False(t, wasInCache)
+
+	// Элемент "ccc" должен быть вытеснен.
+		val,isexist =c.Get("ccc")
+		require.False(t, isexist)
+		require.Equal(t, nil, val)
+
 	})
 }
 
