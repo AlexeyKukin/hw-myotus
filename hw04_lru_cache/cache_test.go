@@ -64,34 +64,34 @@ func TestCache(t *testing.T) {
 
 		wasInCache = c.Set("ddd", 400)
 		require.False(t, wasInCache)
-// Проверяем, должен быть исключен элемент "aaa"
-		val,isexist :=c.Get("aaa")
+		// Проверяем, должен быть исключен элемент "aaa"
+		val, isexist := c.Get("aaa")
 		require.False(t, isexist)
 		require.Equal(t, nil, val)
 
-		val,isexist = c.Get("bbb")
+		val, isexist = c.Get("bbb")
 		require.True(t, isexist)
 		require.Equal(t, 200, val)
 
-		val,isexist = c.Get("ccc")
+		val, isexist = c.Get("ccc")
 		require.True(t, isexist)
 		require.Equal(t, 300, val)
 
-		val,isexist = c.Get("ddd")
+		val, isexist = c.Get("ddd")
 		require.True(t, isexist)
 		require.Equal(t, 400, val)
 
-	// Теперь вызовем элемент "bbb" и добавим еще один
+		// Теперь вызовем элемент "bbb" и добавим еще один
 
-		val,isexist = c.Get("bbb")
+		val, isexist = c.Get("bbb")
 		require.True(t, isexist)
 		require.Equal(t, 200, val)
 
 		wasInCache = c.Set("xxx", 777)
 		require.False(t, wasInCache)
 
-	// Элемент "ccc" должен быть вытеснен.
-		val,isexist =c.Get("ccc")
+		// Элемент "ccc" должен быть вытеснен.
+		val, isexist = c.Get("ccc")
 		require.False(t, isexist)
 		require.Equal(t, nil, val)
 	})
